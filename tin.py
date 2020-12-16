@@ -204,7 +204,7 @@ TOKENS = {
 
     r'→[a-z_]+': META(define_var),
     r'←[a-z_]+': META(delete_var),
-    r'.[a-z_]+': META(get_var),
+    r'\.[a-z_]+': META(get_var),
 
     r'⟨[^⟨⟩]+⟩': BLOCK(),
 
@@ -219,11 +219,13 @@ TOKENS = {
     r'\/': ID(lambda i, j: i / j),
     r'\%': ID(lambda i, j: i % j),
 
-    r'>': ID(lambda i: i + 1),
-    r'<': ID(lambda i: i - 1),
+    r'⊳': ID(lambda i: i + 1),
+    r'⊲': ID(lambda i: i - 1),
 
     r'𝔹': ID(lambda i: i.astype(np.bool) if isinstance(i, np.ndarray) else bool(i)),
 
+    r'<': ID(lambda i, j: i < j),
+    r'>': ID(lambda i, j: i > j),
     r'∃': ID(lambda i: np.any(i)),
     r'∄': ID(lambda i: not np.any(i)),
     r'∀': ID(lambda i: np.all(i)),
@@ -236,6 +238,9 @@ TOKENS = {
     r'R': ID(lambda i, j: np.array([j for _ in range(i)])),
     r'↓': ID(lambda i, j: j[i]),
     r'↑': ID(assign_to_index),
+
+    r'∑': ID(lambda i: np.sum(i)),
+    r'∏': ID(lambda i: np.prod(i)),
 
     # Functional array operations
     r'`': ID(lambda i: i[1:]),
