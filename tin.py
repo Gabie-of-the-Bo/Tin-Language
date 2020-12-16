@@ -242,6 +242,8 @@ TOKENS = {
     r'∑': ID(lambda i: np.sum(i)),
     r'∏': ID(lambda i: np.prod(i)),
 
+    r'⍴': ID(lambda i: i.shape[0] if len(i.shape) == 1 else i.shape),
+
     # Functional array operations
     r'`': ID(lambda i: i[1:]),
     r'´': ID(lambda i: i[:-1]),
