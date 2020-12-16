@@ -72,6 +72,12 @@ def skip(machine, op, ip, tokens, stack):
 
     return ip, tokens, stack
 
+def skip_dup(machine, op, ip, tokens, stack):
+    if not stack[-1]: 
+        ip += 1
+
+    return ip, tokens, stack
+
 def skip_inv(machine, op, ip, tokens, stack):
     if stack.pop():   
         ip += 1
@@ -187,6 +193,7 @@ TOKENS = {
     r'↶': META(swap),
     
     r'\?': META(skip),
+    r'◊': META(skip_dup),
     r'\:': META(skip_inv),
     r'\[': META(branch_init),
     r'\]': META(branch_end),
@@ -212,13 +219,16 @@ TOKENS = {
     r'\/': ID(lambda i, j: i / j),
     r'\%': ID(lambda i, j: i % j),
 
+    r'>': ID(lambda i: i + 1),
+    r'<': ID(lambda i: i - 1),
+
     r'𝔹': ID(lambda i: i.astype(np.bool) if isinstance(i, np.ndarray) else bool(i)),
 
     r'∃': ID(lambda i: np.any(i)),
     r'∄': ID(lambda i: not np.any(i)),
     r'∀': ID(lambda i: np.all(i)),
 
-    r'>': ID(lambda i: print(i)),
+    r'\$': ID(lambda i: print(i)),
 
     # Array operations
     r'ι': ID(lambda i: np.arange(i)),
