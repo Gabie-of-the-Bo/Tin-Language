@@ -245,6 +245,12 @@ TOKENS = {
 
     r'⍴': ID(lambda i: i.shape[0] if len(i.shape) == 1 else i.shape),
 
+    r'⌈': ID(lambda i: np.max(i)),
+    r'⌊': ID(lambda i: np.min(i)),
+
+    r'#': ID(lambda i, j: np.sum(j == i)),
+    r'º': ID(lambda i, j: np.where(i == j)[0]),
+
     # Functional array operations
     r'`': ID(lambda i: i[1:]),
     r'´': ID(lambda i: i[:-1]),

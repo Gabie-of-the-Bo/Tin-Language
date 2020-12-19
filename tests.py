@@ -1,4 +1,5 @@
 from time import process_time_ns
+from statistics import mode
 
 import tabulate as tab
 import numpy as np
@@ -25,7 +26,7 @@ class TinTest:
 
         for i in iter(self.test_data):
             correct = self.validator(i)
-            tin_res = compiled_tin.execute([i])[0]
+            tin_res = compiled_tin.execute([i])[-1]
 
             if np.any(correct != tin_res):
                 table['Result'] = 'Failed'
@@ -70,6 +71,7 @@ TESTS = [
 
     TinTest('Statistical mean', '!⍴↶∑/', np.mean, RandomSequenceGenerator(100, 1000, -100, 100)),
     TinTest('Variance', '!!!⍴↶∑/-2↶^∑↶⍴↶/', np.var, RandomSequenceGenerator(100, 10, -100, 100)),
+    TinTest('Mode', '→n(.n{.n↶#})!⌈º0↓.n↶↓←n', mode, RandomSequenceGenerator(100, 100, 0, 10)),
 ]
 
 def execute_tests():
