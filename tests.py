@@ -69,6 +69,7 @@ TESTS = [
     TinTest('Recursive factorial', '|◊⟨!!⊲∇·→n⟩:⟨1→n⟩.n←n|→|F| F', np.math.factorial, range(50)),
 
     TinTest('Statistical mean', '!⍴↶∑/', np.mean, RandomSequenceGenerator(100, 1000, -100, 100)),
+    TinTest('Variance', '!!!⍴↶∑/-2↶^∑↶⍴↶/', np.var, RandomSequenceGenerator(100, 10, -100, 100)),
 ]
 
 def execute_tests():

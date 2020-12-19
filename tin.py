@@ -218,6 +218,7 @@ TOKENS = {
     r'\·': ID(lambda i, j: i * j),
     r'\/': ID(lambda i, j: i / j),
     r'\%': ID(lambda i, j: i % j),
+    r'\^': ID(lambda i, j: i ** j),
 
     r'⊳': ID(lambda i: i + 1),
     r'⊲': ID(lambda i: i - 1),
