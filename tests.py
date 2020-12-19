@@ -1,5 +1,6 @@
 from time import process_time_ns
 from statistics import mode
+from math import sqrt
 
 import tabulate as tab
 import numpy as np
@@ -72,6 +73,8 @@ TESTS = [
     TinTest('Statistical mean', '!⍴↶∑/', np.mean, RandomSequenceGenerator(100, 1000, -100, 100)),
     TinTest('Variance', '!!!⍴↶∑/-2↶^∑↶⍴↶/', np.var, RandomSequenceGenerator(100, 10, -100, 100)),
     TinTest('Mode', '→n(.n{.n↶#})!⌈º0↓.n↶↓←n', mode, RandomSequenceGenerator(100, 100, 0, 10)),
+
+    TinTest('Iterative Fibonacci', '!!→n1<?⟨(0 1)→r ⊲ι{(.r1↓ .r∑)→r}.r1↓→n⟩.n←n', lambda i: int(((1 + sqrt(5)) / 2) ** i / sqrt(5) + 0.5), range(45)),
 ]
 
 def execute_tests():
