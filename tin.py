@@ -185,6 +185,7 @@ def assign_to_index(index, elem, arr):
 TOKENS = {
     # Literals
     r'\d+': int,
+    r'\d*\.\d+': float,
     r'\'.+?\'': lambda i: i[1:-1],
 
     # Meta
@@ -220,10 +221,16 @@ TOKENS = {
     r'\%': ID(lambda i, j: i % j),
     r'\^': ID(lambda i, j: i ** j),
 
+    r'\√': ID(lambda i: np.sqrt(i)),
+
     r'⊳': ID(lambda i: i + 1),
     r'⊲': ID(lambda i: i - 1),
 
+    r'⌉': ID(lambda i: np.ceil(i)),
+    r'⌋': ID(lambda i: np.floor(i)),
+
     r'𝔹': ID(lambda i: i.astype(np.bool) if isinstance(i, np.ndarray) else bool(i)),
+    r'ℤ': ID(lambda i: i.astype(np.int64) if isinstance(i, np.ndarray) else int(i)),
 
     r'<': ID(lambda i, j: i < j),
     r'>': ID(lambda i, j: i > j),
@@ -260,6 +267,8 @@ TOKENS = {re.compile(i): j for i, j in TOKENS.items()}
 
 # ***** Model *****
 
+class TinParsingException(RuntimeError): ...
+
 class Tin:
     def __init__(self, code):
         self.parent = None
@@ -270,13 +279,14 @@ class Tin:
                 i += 1
                 continue
 
-            for r, f in TOKENS.items():
-                match = r.search(code, i)
+            matches = filter(lambda j: j[0] and j[0].start() == i, ((r.search(code, i), f) for r, f in TOKENS.items()))
+            m, f = max(matches, key=lambda i: len(i[0].group()), default=(None, None))
 
-                if match and match.start() == i:
-                    self.tokens.append(f(match.group()))
-                    i += match.end() - match.start()
-                    break
+            if (m, f) == (None, None):
+                raise(TinParsingException(f'Invalid symbol found at position {i}: [...] {code[i:i + 10]} [...]'))
+
+            self.tokens.append(f(m.group()))
+            i += m.end() - m.start()
     
     def execute(self, stack=None):
         if not stack:

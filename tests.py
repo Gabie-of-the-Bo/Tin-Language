@@ -42,6 +42,8 @@ class TinTest:
 
         print(tab.tabulate(table.items(), headers='firstrow', tablefmt='fancy_grid', stralign='center'))
 
+        return table['Result'] == 'Ok'
+
 
 class RandomSequenceGenerator:
     def __init__(self, items, size, min_val, max_val):
@@ -76,8 +78,21 @@ TESTS = [
 
     TinTest('Iterative Fibonacci', '!!→n1<?⟨2ι→r ⊲ι{(.r1↓ .r∑)→r}.r1↓→n⟩.n←n', lambda i: int(((1 + sqrt(5)) / 2) ** i / sqrt(5) + 0.5), range(45)),
     TinTest('Recursive Fibonacci', '!1<?⟨⊲!⊲∇↶∇+⟩', lambda i: int(((1 + sqrt(5)) / 2) ** i / sqrt(5) + 0.5), range(15)),
+    TinTest('Binet Fibonacci', '2 5√⊳/^5√↶/.5+ℤ', lambda i: int(((1 + sqrt(5)) / 2) ** i / sqrt(5) + 0.5), range(100)),
 ]
 
 def execute_tests():
+    failed = []
+    
     for t in TESTS:
-        t.execute()
+        if not t.execute():
+            failed.append(t.name)
+
+    if failed:
+        print('\nThe following tests failed:')
+
+        for i in failed:
+            print(f' - {i}')
+
+    else:
+        print('\nAll tests were correct!')
